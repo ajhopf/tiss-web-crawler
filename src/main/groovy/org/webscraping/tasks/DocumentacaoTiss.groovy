@@ -54,11 +54,10 @@ class DocumentacaoTiss {
         }
 
         String comunicacaoFolderPath = "$Config.reportFolderPath/componente_comunicacao"
-        File reportDir = new File(comunicacaoFolderPath)
+        def reportDir = new File("$Config.reportFolderPath/componente_comunicacao")
+        reportDir.mkdirs()
 
-        reportDir.mkdir()
-
-        File saved = new File("$comunicacaoFolderPath/PadraoTiss.zip")
+        File saved = new File("$comunicacaoFolderPath/padrao_tiss.zip")
 
         File file = httpRequester.downloadFile(downloadUrl, saved)
 

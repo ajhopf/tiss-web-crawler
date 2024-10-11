@@ -6,15 +6,27 @@ import org.webscraping.util.HttpRequester
 import org.webscraping.util.MainPageUrlFetcher
 
 static void main(String[] args) {
-   HttpRequester httpRequester = new HttpRequester()
+   try {
+      HttpRequester httpRequester = new HttpRequester()
 
-   MainPageUrlFetcher tissPageUrlFetcher = new MainPageUrlFetcher(httpRequester)
-   String tissUrl = tissPageUrlFetcher.getTissPageUrl()
+      MainPageUrlFetcher tissPageUrlFetcher = new MainPageUrlFetcher(httpRequester)
+      String tissUrl = tissPageUrlFetcher.getTissPageUrl()
 
-   DocumentacaoTiss documentacaoTiss = new DocumentacaoTiss(httpRequester, tissUrl)
-   documentacaoTiss.obterDocumentacaoTiss()
+      DocumentacaoTiss documentacaoTiss = new DocumentacaoTiss(httpRequester, tissUrl)
+      documentacaoTiss.obterDocumentacaoTiss()
 
-   HistoricoVersoes historicoVersoes = new HistoricoVersoes(httpRequester, tissUrl)
-   historicoVersoes.obterHistoricoDeVersoes()
+      HistoricoVersoes historicoVersoes = new HistoricoVersoes(httpRequester, tissUrl)
+      historicoVersoes.obterHistoricoDeVersoes()
+   } catch (UnknownHostException e) {
+      println "Unknown host: ${e.message}"
+   } catch (SocketTimeoutException e) {
+      println "Connection timed out"
+   } catch (IOException e) {
+      println "IO Error: ${e.message}"
+   } catch (IllegalArgumentException e) {
+      println "Error parsing document: ${e.message}"
+   } catch (Exception e) {
+      println "An unexpected error occurred: ${e.message}"
+   }
 }
 
