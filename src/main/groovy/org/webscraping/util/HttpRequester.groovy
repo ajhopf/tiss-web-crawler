@@ -1,4 +1,4 @@
-package org.webscraping
+package org.webscraping.util
 
 import groovyx.net.http.HttpBuilder
 import groovyx.net.http.optional.Download
