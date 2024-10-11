@@ -6,9 +6,9 @@ import org.apache.commons.mail.EmailAttachment
 import org.apache.commons.mail.MultiPartEmail
 import org.webscraping.config.Config
 
-class EmailService {
+class EmailSenderService {
     static void sendEmail (String userEmail, String userName) {
-        Dotenv dotenv = Dotenv.configure().directory("../../../../../.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("../../../../../.env").load()
 
         MultiPartEmail email = new MultiPartEmail()
         email.setHostName(dotenv.get("SMTP_HOST"))
@@ -18,14 +18,14 @@ class EmailService {
         email.addTo(userEmail, userName)
         email.setFrom(dotenv.get("SMTP_USER"), "André Jaques Hopf")
         email.setSubject("Relatório Tiss")
-        email.setMsg("Segue em anexo os documentos obtidos no relatório.")
+        email.setMsg("Olá $userName!\n\n Segue em anexo os documentos obtidos no relatório.")
 
         email = addAttachmentsTo(email)
 
-        email.send();
+        email.send()
     }
 
-    static addAttachmentsTo(MultiPartEmail email) {
+    private static addAttachmentsTo(MultiPartEmail email) {
         String reportFolderPath = Config.reportFolderPath
 
         List<Map<String, String>> attachments = [
