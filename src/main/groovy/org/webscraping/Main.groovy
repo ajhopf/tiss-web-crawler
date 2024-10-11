@@ -1,8 +1,8 @@
 package org.webscraping
 
-import org.webscraping.tasks.DocumentacaoTiss
-import org.webscraping.tasks.HistoricoVersoes
-import org.webscraping.tasks.TabelasRelacionadas
+import org.webscraping.service.DocumentacaoTiss
+import org.webscraping.service.HistoricoVersoes
+import org.webscraping.service.TabelasRelacionadas
 import org.webscraping.util.MainPageUrlFetcher
 
 static void main(String[] args) {

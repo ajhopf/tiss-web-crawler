@@ -1,4 +1,4 @@
-package org.webscraping.tasks
+package org.webscraping.model
 
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements

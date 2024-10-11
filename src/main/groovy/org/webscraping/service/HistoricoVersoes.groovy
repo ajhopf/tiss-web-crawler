@@ -1,8 +1,9 @@
-package org.webscraping.tasks
+package org.webscraping.service
 
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.webscraping.config.Config
+import org.webscraping.model.Task
 import org.webscraping.util.HttpRequester
 
 class HistoricoVersoes extends Task{

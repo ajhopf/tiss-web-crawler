@@ -1,8 +1,9 @@
-package org.webscraping.tasks
+package org.webscraping.service
 
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
+import org.webscraping.model.Task
 import org.webscraping.util.HttpRequester
 
 class DocumentacaoTiss extends Task {

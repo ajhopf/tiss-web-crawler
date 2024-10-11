@@ -1,4 +1,6 @@
-package org.webscraping.tasks
+package org.webscraping.service
+
+import org.webscraping.model.Task
 
 class TabelasRelacionadas extends Task {
 
