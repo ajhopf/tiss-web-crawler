@@ -3,65 +3,42 @@ package org.webscraping.tasks
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import org.webscraping.config.Config
 import org.webscraping.util.HttpRequester
 
-class DocumentacaoTiss {
-    HttpRequester httpRequester
-    String tissUrl
+class DocumentacaoTiss extends Task {
 
-    DocumentacaoTiss(HttpRequester httpRequester, String tissUrl) {
-        this.httpRequester = httpRequester
-        this.tissUrl = tissUrl
+    DocumentacaoTiss(String mainPageUrl) {
+        super(mainPageUrl)
     }
 
     void obterDocumentacaoTiss() {
-        String padraoTissUrl = getPadraoTissLink(tissUrl)
-        downloadComponenteComunicacao(padraoTissUrl)
+        String padraoTissUrl = super.getLink('Clique aqui para acessar a versão')
+
+        downloadComponente(padraoTissUrl, 'Componente Organizacional', 'componente_organizacional.pdf')
+        downloadComponente(padraoTissUrl, 'Componente de Comunicação', 'componente_comunicacao.zip')
+        downloadComponente(padraoTissUrl, 'Componente de Conteúdo e Estrutura', 'componente_conteudo.zip')
+        downloadComponente(padraoTissUrl, 'Componente de Representação de Conceitos em Saúde (Terminologia Unificada da Saúde Suplementar)', 'componente_representacao.zip')
+        downloadComponente(padraoTissUrl, 'Componente de Segurança e Privacidade', 'componente_seguranca.zip')
     }
 
-    private String getPadraoTissLink(String url) {
-        Document tissPage = httpRequester.getPageDocument(url)
+    private void downloadComponente(String url, String lookUpText, String fileName) {
+        Document padraoTissPage = HttpRequester.getPageDocument(url)
 
-        Elements a = tissPage.select('p.callout > a')
-
-        String linkUrl = ''
-
-        a.each {
-            String aText = it.text()
-
-            if (aText.contains('Clique aqui para acessar a versão')) {
-                linkUrl = it.attr('href')
-            }
-        }
-
-        return linkUrl
-    }
-
-    private void downloadComponenteComunicacao(String url) {
-        Document padraoTissPage = httpRequester.getPageDocument(url)
-
-        Elements rows = padraoTissPage.select('tr')
+        Elements rows = padraoTissPage.select('tbody tr')
 
         String downloadUrl = ''
 
         rows.each {row ->
             Element rowTitle = row.selectFirst('td')
 
-            if (rowTitle && rowTitle.text() == 'Componente de Comunicação' ){
+            if (rowTitle && rowTitle.text() == lookUpText ){
                 downloadUrl = row.select('a').attr('href')
             }
         }
 
-        String comunicacaoFolderPath = "$Config.reportFolderPath/componente_comunicacao"
-        def reportDir = new File(comunicacaoFolderPath)
-        reportDir.mkdirs()
+        String folderName = fileName.split(/\./)[0]
 
-        File saved = new File("$comunicacaoFolderPath/padrao_tiss.zip")
-
-        File file = httpRequester.downloadFile(downloadUrl, saved)
-
-        println "File downloaded to: ${file.absolutePath}"
+        super.downloadToFolder("padrao_tiss/$folderName", fileName, downloadUrl)
     }
 
 }

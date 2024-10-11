@@ -5,7 +5,7 @@ import groovyx.net.http.optional.Download
 import org.jsoup.nodes.Document
 
 class HttpRequester {
-    Document getPageDocument(String url) {
+    static Document getPageDocument(String url) {
         Document page = HttpBuilder.configure {
             request.uri = url
             request.headers['Accept-Language'] = "*"
@@ -15,7 +15,7 @@ class HttpRequester {
         return page
     }
 
-    File downloadFile(String url, File file) {
+    static File downloadFile(String url, File file) {
         return HttpBuilder.configure {
             request.uri = url
         }.get {

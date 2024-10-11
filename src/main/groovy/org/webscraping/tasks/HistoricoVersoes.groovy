@@ -1,46 +1,24 @@
 package org.webscraping.tasks
 
 import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import org.webscraping.util.FileWriter
+import org.webscraping.config.Config
 import org.webscraping.util.HttpRequester
 
-class HistoricoVersoes {
-    HttpRequester httpRequester
-    String tissUrl
+class HistoricoVersoes extends Task{
 
-    HistoricoVersoes(HttpRequester httpRequester, String tissUrl) {
-        this.httpRequester = httpRequester
-        this.tissUrl = tissUrl
+    HistoricoVersoes(String mainPageUrl) {
+        super(mainPageUrl)
     }
 
     void obterHistoricoDeVersoes() {
-        String historicoDeVersoes = getHistoricoVersoesLink(tissUrl)
+        String historicoDeVersoes = super.getLink('Clique aqui para acessar todas as versões dos Componentes')
 
         getHistoricoDeVersoes(historicoDeVersoes)
     }
 
-    private String getHistoricoVersoesLink(String url) {
-        Document tissPage = httpRequester.getPageDocument(url)
-
-        Elements a = tissPage.select('p.callout > a')
-
-        String linkUrl = ''
-
-        a.each {
-            String aText = it.text()
-
-            if (aText.contains('Clique aqui para acessar todas as versões dos Componentes')) {
-                linkUrl = it.attr('href')
-            }
-        }
-
-        return linkUrl
-    }
-
-    private void getHistoricoDeVersoes(String url) {
-        Document versoesPage = httpRequester.getPageDocument(url)
+    private static void getHistoricoDeVersoes(String url) {
+        Document versoesPage = HttpRequester.getPageDocument(url)
 
         Elements rows = versoesPage.select('tbody tr')
 
@@ -59,8 +37,16 @@ class HistoricoVersoes {
             }
         }
 
-        FileWriter fileWriter = new FileWriter()
-        fileWriter.createCsvFile(rowElementsList, 'historico_versoes')
+        createCsvFile(rowElementsList, 'historico_versoes')
+    }
+
+    private static void createCsvFile(List<List<String>> stringList, String fileName) {
+        new File(Config.getReportFolderPath(), fileName + ".csv")
+                .withWriter('utf-8') { writer ->
+                    stringList.each {line ->
+                        writer.writeLine line.join(',')
+                    }
+                }
     }
 
 
