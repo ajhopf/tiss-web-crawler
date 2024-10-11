@@ -13,6 +13,11 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-all:3.0.13'
     implementation group: 'io.github.http-builder-ng', name: 'http-builder-ng-core', version: '1.0.4'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-email
+    implementation group: 'org.apache.commons', name: 'commons-email', version: '1.6.0'
+    // https://mvnrepository.com/artifact/io.github.cdimascio/dotenv-java
+    implementation 'io.github.cdimascio:java-dotenv:5.1.4'
+
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.16'
     implementation 'org.slf4j:slf4j-simple:1.7.36'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.1'
