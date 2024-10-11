@@ -2,6 +2,7 @@ package org.webscraping
 
 import org.webscraping.tasks.DocumentacaoTiss
 import org.webscraping.tasks.HistoricoVersoes
+import org.webscraping.tasks.TabelasRelacionadas
 import org.webscraping.util.HttpRequester
 import org.webscraping.util.MainPageUrlFetcher
 
@@ -17,6 +18,9 @@ static void main(String[] args) {
 
       HistoricoVersoes historicoVersoes = new HistoricoVersoes(httpRequester, tissUrl)
       historicoVersoes.obterHistoricoDeVersoes()
+
+      TabelasRelacionadas tabelasRelacionadas = new TabelasRelacionadas(httpRequester, tissUrl)
+      tabelasRelacionadas.obterTabelaseRelacionadas()
    } catch (UnknownHostException e) {
       println "Unknown host: ${e.message}"
    } catch (SocketTimeoutException e) {

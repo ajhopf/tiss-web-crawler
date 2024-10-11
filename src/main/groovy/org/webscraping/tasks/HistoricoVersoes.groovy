@@ -1,6 +1,7 @@
 package org.webscraping.tasks
 
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import org.webscraping.util.FileWriter
 import org.webscraping.util.HttpRequester

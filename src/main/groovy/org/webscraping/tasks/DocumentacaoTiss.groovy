@@ -54,7 +54,7 @@ class DocumentacaoTiss {
         }
 
         String comunicacaoFolderPath = "$Config.reportFolderPath/componente_comunicacao"
-        def reportDir = new File("$Config.reportFolderPath/componente_comunicacao")
+        def reportDir = new File(comunicacaoFolderPath)
         reportDir.mkdirs()
 
         File saved = new File("$comunicacaoFolderPath/padrao_tiss.zip")
