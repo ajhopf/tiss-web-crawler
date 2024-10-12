@@ -1,10 +1,10 @@
-package org.webscraping.service
+package org.webscraping.service.tasks
 
 import org.webscraping.model.Task
 
-class TabelasRelacionadas extends Task {
+class TabelasRelacionadasService extends Task {
 
-    TabelasRelacionadas(String mainPageUrl) {
+    TabelasRelacionadasService(String mainPageUrl) {
         super(mainPageUrl)
     }
 

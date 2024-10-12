@@ -5,10 +5,20 @@ import org.jsoup.select.Elements
 
 class MainPageUrlFetcher {
     static String getTissPageUrl() {
-        String espacoDoPrestadorHref = getEspacoDoPrestadorLink()
-        String tissHref = getTissLink(espacoDoPrestadorHref)
+        try {
+            String espacoDoPrestadorHref = getEspacoDoPrestadorLink()
+            if (!espacoDoPrestadorHref) throw new Exception("Espaço do Prestador não encontrado")
 
-        return tissHref
+            String tissHref = getTissLink(espacoDoPrestadorHref)
+            if (!tissHref) throw new Exception("Link TISS não encontrado")
+
+            return tissHref
+        } catch (Exception e) {
+            println "Erro ao obter o endereço da página inicial."
+            println e.getMessage()
+
+            return null
+        }
     }
 
     private static String getEspacoDoPrestadorLink() {

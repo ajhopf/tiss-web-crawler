@@ -1,48 +1,90 @@
 package org.webscraping.view
 
+import org.apache.commons.mail.EmailException
 import org.webscraping.model.User
-import org.webscraping.service.DocumentacaoTiss
+import org.webscraping.service.tasks.DocumentacaoTissService
 import org.webscraping.service.EmailSenderService
-import org.webscraping.service.HistoricoVersoes
-import org.webscraping.service.TabelasRelacionadas
+import org.webscraping.service.tasks.HistoricoVersoesService
+import org.webscraping.service.tasks.TabelasRelacionadasService
 import org.webscraping.service.UserService
 import org.webscraping.util.MainPageUrlFetcher
 
+import javax.mail.AuthenticationFailedException
+import javax.mail.MessagingException
+import javax.mail.internet.AddressException
+
 class RelatorioView {
     static void gerarRelatorios(UserService userService) {
-        try {
-            String mainPageUrl = MainPageUrlFetcher.tissPageUrl
+        String mainPageUrl = MainPageUrlFetcher.tissPageUrl
 
-            println "Fazendo download da Documentação Tiss"
-            DocumentacaoTiss documentacaoTiss = new DocumentacaoTiss(mainPageUrl)
+        if (mainPageUrl == null) {
+            return
+        }
+
+        executarComTratamento("download da Documentação Tiss") {
+            DocumentacaoTissService documentacaoTiss = new DocumentacaoTissService(mainPageUrl)
             documentacaoTiss.obterDocumentacaoTiss()
+        }
 
-            println "Fazendo download do Histórico de Versões"
-            HistoricoVersoes historicoVersoes = new HistoricoVersoes(mainPageUrl)
+        executarComTratamento("download do Histórico de Versões") {
+            HistoricoVersoesService historicoVersoes = new HistoricoVersoesService(mainPageUrl)
             historicoVersoes.obterHistoricoDeVersoes()
+        }
 
-            println "Fazendo download das Tabelas Relacionadas"
-            TabelasRelacionadas tabelasRelacionadas = new TabelasRelacionadas(mainPageUrl)
+        executarComTratamento("download das Tabelas Relacionadas") {
+            TabelasRelacionadasService tabelasRelacionadas = new TabelasRelacionadasService(mainPageUrl)
             tabelasRelacionadas.obterTabelasRelacionadas()
+        }
 
-            println "Enviando relatórios para os emails cadastrados"
-            List<User> usuarios = userService.listarUsuarios()
+        println "----------------------------------------------"
+        println "Enviando relatórios para os emails cadastrados"
+        List<User> usuarios = userService.listarUsuarios()
+        enviarEmailParaUsuarios(usuarios)
+    }
 
-            usuarios.each {usuario ->
+    static void executarComTratamento(String descricao, Closure operacao) {
+        try {
+            println "----------------------------------------------"
+            println "Iniciando: $descricao"
+            operacao.call()
+        } catch (Exception e) {
+            println "Erro ao executar: $descricao"
+            println e.getMessage()
+            e.printStackTrace()
+        }
+    }
+
+
+    static void enviarEmailParaUsuarios(List<User> usuarios) {
+        usuarios.each { usuario ->
+            try {
                 EmailSenderService.sendEmail(usuario.email, usuario.name)
+            } catch (AddressException e) {
+                println "--------"
+                println "Endereço de e-mail inválido para ${usuario.name}: ${usuario.email}."
+                println e.getMessage()
+            } catch (AuthenticationFailedException e) {
+                println "--------"
+                println "Falha de autenticação no servidor SMTP. Verifique usuário e senha."
+                println e.getMessage()
+            } catch (EmailException e) {
+                println "--------"
+                println "Erro ao enviar e-mail para ${usuario.name}."
+                println e.getMessage()
+            } catch (MessagingException e) {
+                println "--------"
+                println "Problema de comunicação com o servidor de e-mail."
+                println e.getMessage()
+            } catch (IOException e) {
+                println "--------"
+                println "Erro ao acessar anexos ou arquivo de configuração."
+                println e.getMessage()
+            } catch (Exception e) {
+                println "--------"
+                println "Erro inesperado ao enviar e-mail para ${usuario.name}."
+                println e.getMessage()
+                e.printStackTrace()
             }
-
-       } catch (UnknownHostException e) {
-            println "Unknown host: ${e.message}"
-       } catch (SocketTimeoutException e) {
-            println "Connection timed out"
-       } catch (IOException e) {
-            println "IO Error: ${e.message}"
-       } catch (IllegalArgumentException e) {
-            println "Error parsing document: ${e.message}"
-       } catch (Exception e) {
-          e.printStackTrace()
-            println "An unexpected error occurred: ${e.message}"
-       }
+        }
     }
 }

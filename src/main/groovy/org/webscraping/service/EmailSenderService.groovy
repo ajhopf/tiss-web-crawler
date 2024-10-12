@@ -20,12 +20,20 @@ class EmailSenderService {
         email.setSubject("Relatório Tiss")
         email.setMsg("Olá $userName!\n\n Segue em anexo os documentos obtidos no relatório.")
 
-        email = addAttachmentsTo(email)
+        Integer attachmentsNumber = addAttachmentsTo(email)
 
-        email.send()
+        if (attachmentsNumber > 0) {
+            email.send()
+            println "--------------"
+            println "Email enviado com sucesso para $userName"
+        } else {
+            println "--------------"
+            println "Email não enviado para $userName pois não foi possível adicionar nenhuma parte do relatório."
+        }
+
     }
 
-    private static addAttachmentsTo(MultiPartEmail email) {
+    private static Integer addAttachmentsTo(MultiPartEmail email) {
         String reportFolderPath = Config.reportFolderPath
 
         List<Map<String, String>> attachments = [
@@ -46,17 +54,26 @@ class EmailSenderService {
                 ],
         ]
 
+        Integer attachmentNumber = 0
+
         attachments.each {item ->
-            EmailAttachment attachment = new EmailAttachment()
+            try {
+                EmailAttachment attachment = new EmailAttachment()
 
-            attachment.setPath("$reportFolderPath/$item.folder$item.fileName")
-            attachment.setDisposition(EmailAttachment.ATTACHMENT)
-            attachment.setDescription(item.name)
-            attachment.setName(item.fileName)
+                attachment.setPath("$reportFolderPath/$item.folder$item.fileName")
+                attachment.setDisposition(EmailAttachment.ATTACHMENT)
+                attachment.setDescription(item.name)
+                attachment.setName(item.fileName)
 
-            email.attach(attachment)
+                email.attach(attachment)
+                attachmentNumber++
+            } catch (Exception e) {
+                println "Não foi possível adicionar o anexo: $item.fileName"
+                println e.getMessage()
+            }
+
         }
 
-        return email
+        return attachmentNumber
     }
 }

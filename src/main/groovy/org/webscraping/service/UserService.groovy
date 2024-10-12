@@ -13,40 +13,19 @@ class UserService {
         this.repository = repository
     }
 
-    void addUser(User user) {
-        try {
-            Integer id = repository.adicionarUsuario(user)
-            println "Email registrado com sucesso. Id: $id"
-        } catch (SQLException e) {
-            throw e
-        }
+    Integer addUser(User user) throws SQLException {
+        return repository.adicionarUsuario(user)
     }
 
-    List<User> listarUsuarios() {
-        try {
-            return repository.listarUsuarios()
-        } catch (SQLException e) {
-            throw e
-        }
+    List<User> listarUsuarios() throws SQLException {
+        return repository.listarUsuarios()
     }
 
-    void updateUsuario(User updatedUser) {
-        try {
-            repository.editarUsuario(updatedUser)
-        } catch (UsuarioNotFoundException e) {
-            throw e
-        } catch (SQLException e) {
-            throw e
-        }
+    void updateUsuario(User updatedUser) throws UsuarioNotFoundException, SQLException {
+        repository.editarUsuario(updatedUser)
     }
 
-    void deletarUsuario(Integer id) {
-        try {
-            repository.deletarUsuario(id)
-        } catch (UsuarioNotFoundException e) {
-            throw e
-        } catch (SQLException e) {
-            throw e
-        }
+    void deletarUsuario(Integer id) throws UsuarioNotFoundException, SQLException {
+        repository.deletarUsuario(id)
     }
 }

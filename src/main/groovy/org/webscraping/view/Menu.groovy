@@ -35,6 +35,7 @@ class Menu {
                 }
 
             } catch (Exception e) {
+                println 'la no menu'
                 e.getMessage()
                 e.printStackTrace()
                 return

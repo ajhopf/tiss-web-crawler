@@ -1,4 +1,4 @@
-package org.webscraping.service
+package org.webscraping.service.tasks
 
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
@@ -6,9 +6,9 @@ import org.webscraping.config.Config
 import org.webscraping.model.Task
 import org.webscraping.util.HttpRequester
 
-class HistoricoVersoes extends Task{
+class HistoricoVersoesService extends Task{
 
-    HistoricoVersoes(String mainPageUrl) {
+    HistoricoVersoesService(String mainPageUrl) {
         super(mainPageUrl)
     }
 

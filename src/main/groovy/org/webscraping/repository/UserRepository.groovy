@@ -4,6 +4,8 @@ import groovy.sql.Sql
 import org.webscraping.exception.UsuarioNotFoundException
 import org.webscraping.model.User
 
+import java.sql.SQLException
+
 class UserRepository implements IUserDAO {
     private Sql sql = null
 
@@ -12,10 +14,10 @@ class UserRepository implements IUserDAO {
     }
 
     @Override
-    Integer adicionarUsuario(User user) {
+    Integer adicionarUsuario(User user) throws SQLException {
         def stmt = """
             INSERT INTO usuarios (email, nome)
-            VALUES ($user.email, $user.name)
+            VALUES ($user.email, $user.nam throws SQLException e)
         """
 
         def keys = sql.executeInsert(stmt)
@@ -24,7 +26,7 @@ class UserRepository implements IUserDAO {
     }
 
     @Override
-    List<User> listarUsuarios() {
+    List<User> listarUsuarios() throws SQLException  {
         def stmt = """
             SELECT * FROM usuarios
         """
@@ -44,7 +46,7 @@ class UserRepository implements IUserDAO {
     }
 
     @Override
-    void deletarUsuario(Integer id) {
+    void deletarUsuario(Integer id) throws SQLException {
         def stmt = """
             DELETE FROM usuarios
             WHERE id = $id
@@ -58,7 +60,7 @@ class UserRepository implements IUserDAO {
     }
 
     @Override
-    void editarUsuario(User updatedUser) {
+    void editarUsuario(User updatedUser) throws SQLException  {
         def stmt = """
             UPDATE usuarios
             SET email = $updatedUser.email, nome = $updatedUser.name

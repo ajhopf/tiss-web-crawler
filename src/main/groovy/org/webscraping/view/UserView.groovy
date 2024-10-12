@@ -17,7 +17,13 @@ class UserView {
 
         User user = new User(email: email, name: userName)
 
-        userService.addUser(user)
+        try {
+            userService.addUser(user)
+        } catch (SQLException e) {
+            println "Não foi possível adicionar o usuário"
+            println e.getCause()
+            println e.getMessage()
+        }
     }
 
     static void listarUsuarios(UserService userService) {
@@ -73,6 +79,7 @@ class UserView {
             println 'Houve um problema ao deletar o usuário'
             e.printStackTrace()
         } catch (UsuarioNotFoundException e) {
+            println 'N'
             println e.getMessage()
         }
     }
