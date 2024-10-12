@@ -14,7 +14,7 @@ import javax.mail.MessagingException
 import javax.mail.internet.AddressException
 
 class RelatorioView {
-    static void gerarRelatorios(UserService userService) {
+    static void gerarRelatorios(UserService userService = null) {
         String mainPageUrl = MainPageUrlFetcher.tissPageUrl
 
         if (mainPageUrl == null) {
@@ -36,10 +36,10 @@ class RelatorioView {
             tabelasRelacionadas.obterTabelasRelacionadas()
         }
 
-        println "----------------------------------------------"
-        println "Enviando relatórios para os emails cadastrados"
-        List<User> usuarios = userService.listarUsuarios()
-        enviarEmailParaUsuarios(usuarios)
+        if (userService) {
+            enviarEmailParaUsuarios(userService)
+        }
+
     }
 
     static void executarComTratamento(String descricao, Closure operacao) {
@@ -55,7 +55,11 @@ class RelatorioView {
     }
 
 
-    static void enviarEmailParaUsuarios(List<User> usuarios) {
+    static void enviarEmailParaUsuarios(UserService userService) {
+        println "----------------------------------------------"
+        println "Enviando relatórios para os emails cadastrados"
+        List<User> usuarios = userService.listarUsuarios()
+
         usuarios.each { usuario ->
             try {
                 EmailSenderService.sendEmail(usuario.email, usuario.name)

@@ -28,4 +28,8 @@ class UserService {
     void deletarUsuario(Integer id) throws UsuarioNotFoundException, SQLException {
         repository.deletarUsuario(id)
     }
+
+    void criarTabelaDeUsuarios() {
+        repository.criarTabela()
+    }
 }

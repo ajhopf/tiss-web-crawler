@@ -8,7 +8,9 @@ import org.webscraping.config.Config
 
 class EmailSenderService {
     static void sendEmail (String userEmail, String userName) {
-        Dotenv dotenv = Dotenv.configure().directory("../../../../../.env").load()
+        String dotEnvPath = Config.envPath
+
+        Dotenv dotenv = Dotenv.configure().directory(dotEnvPath).load()
 
         MultiPartEmail email = new MultiPartEmail()
         email.setHostName(dotenv.get("SMTP_HOST"))

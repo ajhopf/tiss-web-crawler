@@ -1,9 +1,18 @@
 plugins {
+    id 'application'
     id 'groovy'
 }
 
 group = 'org.webscraping'
 version = '1.0-SNAPSHOT'
+
+application {
+    mainClass = 'org.webscraping.Main'
+}
+
+run {
+    standardInput = System.in
+}
 
 repositories {
     mavenCentral()

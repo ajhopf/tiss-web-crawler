@@ -7,4 +7,5 @@ interface IUserDAO {
     List<User> listarUsuarios()
     void deletarUsuario(Integer id)
     void editarUsuario(User updatedUser)
+    void criarTabela()
 }

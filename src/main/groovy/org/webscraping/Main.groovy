@@ -7,9 +7,17 @@ import org.webscraping.util.SqlFactory
 import org.webscraping.view.Menu
 
 static void main(String[] args) {
-   Sql sql = SqlFactory.newInstance()
-   UserRepository userRepository = new UserRepository(sql)
-   UserService userService = new UserService(userRepository)
+   try {
+      Sql sql = SqlFactory.newInstance()
+      UserRepository userRepository = new UserRepository(sql)
+      UserService userService = new UserService(userRepository)
+      userService.criarTabelaDeUsuarios()
+      Menu.iniciar(userService)
+   } catch (Exception e) {
+      println "Não foi possível conectar ao banco de dados"
+      Menu.iniciar()
+   }
 
-   Menu.iniciar(userService)
+
+
 }

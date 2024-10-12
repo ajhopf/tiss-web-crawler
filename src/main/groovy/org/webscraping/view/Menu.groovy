@@ -4,6 +4,31 @@ import org.webscraping.service.UserService
 import org.webscraping.util.InputHelpers
 
 class Menu {
+    static void iniciar() {
+        Scanner sc = new Scanner(System.in)
+        while(true) {
+            gerarMenuInicialReduzido()
+
+            try {
+                int opcaoSelecionada = InputHelpers.getIntInput(0, 1, "Selecione a opção desejada: ", sc)
+
+                switch (opcaoSelecionada) {
+                    case 0:
+                        println "Até logo!"
+                        return
+                    case 1:
+                        RelatorioView.gerarRelatorios()
+                        break
+                }
+            } catch(Exception e) {
+                e.getMessage()
+                e.printStackTrace()
+                return
+            }
+        }
+    }
+
+
     static void iniciar(UserService userService) {
         Scanner sc = new Scanner(System.in)
 
@@ -35,7 +60,6 @@ class Menu {
                 }
 
             } catch (Exception e) {
-                println 'la no menu'
                 e.getMessage()
                 e.printStackTrace()
                 return
@@ -43,6 +67,18 @@ class Menu {
         }
     }
 
+    static void gerarMenuInicialReduzido() {
+        println """
+                |Bem vindo ao Tiss WebScraper
+                |
+                |Atenção: Suas opções estão reduzidas pois não foi possível conectar a um banco de dados.
+                |
+                |Selecione uma das opções abaixo:
+                |----- Relatórios -----
+                |1. Gerar Relatórios
+                |0. Sair
+            """.stripMargin()
+    }
 
     static void gerarMenuInicial(){
         println '''---------------------------------------------

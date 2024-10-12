@@ -1,16 +1,17 @@
 package org.webscraping.util
 
 import groovy.sql.Sql
+import org.webscraping.config.Config
 
 import java.sql.SQLException
 
 class SqlFactory {
     static Sql newInstance() throws SQLException, ClassNotFoundException {
-        final String url = 'jdbc:postgresql://localhost:5432/tiss'
+        final String url = Config.jdbcUrl
 
-        final String user = 'andre'
+        final String user = Config.jdbcUser
 
-        final String password = '020917'
+        final String password = Config.jdbcPassword
 
         final String driver = 'org.postgresql.Driver'
 

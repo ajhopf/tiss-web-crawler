@@ -17,7 +17,7 @@ class UserRepository implements IUserDAO {
     Integer adicionarUsuario(User user) throws SQLException {
         def stmt = """
             INSERT INTO usuarios (email, nome)
-            VALUES ($user.email, $user.nam throws SQLException e)
+            VALUES ($user.email, $user.name)
         """
 
         def keys = sql.executeInsert(stmt)
@@ -72,5 +72,18 @@ class UserRepository implements IUserDAO {
         if (rowsAffected == 0) {
             throw new UsuarioNotFoundException("Não foi possível encontrar o usuário com o id $updatedUser.id")
         }
+    }
+
+    @Override
+    void criarTabela() throws SQLException {
+        def stmt = """
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id SERIAL PRIMARY KEY,
+                nome VARCHAR(100) NOT NULL,
+                email VARCHAR(100) UNIQUE NOT NULL
+            );
+        """
+
+        sql.execute(stmt)
     }
 }
